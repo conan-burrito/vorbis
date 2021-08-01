@@ -48,8 +48,7 @@ class VorbisConan(ConanFile):
         self.requires("ogg/1.3.4@conan-burrito/stable")
 
     def source(self):
-        tools.get(**self.conan_data["sources"][self.version])
-        os.rename("libvorbis-{}".format(self.version), self.source_subfolder)
+        tools.get(**self.conan_data["sources"][self.version], destination=self.source_subfolder, strip_root=True)
 
     def _configure_cmake(self):
         if self._cmake:
@@ -77,6 +76,7 @@ class VorbisConan(ConanFile):
     def package_info(self):
         self.cpp_info.names["cmake_find_package"] = "Vorbis"
         self.cpp_info.names["cmake_find_package_multi"] = "Vorbis"
+        self.cpp_info.names["pkg_config"] = "vorbis_full_package" # see https://github.com/conan-io/conan-center-index/pull/4173
 
         # vorbis
         self.cpp_info.components["vorbismain"].names["cmake_find_package"] = "vorbis"
